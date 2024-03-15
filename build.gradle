@@ -1,0 +1,8 @@
+//
+allprojects {
+    // Common configuration for all subprojects
+}
+
+subprojects {
+    // Configuration for each submodule
+}
