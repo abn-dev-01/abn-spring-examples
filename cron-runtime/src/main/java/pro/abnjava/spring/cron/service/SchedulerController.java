@@ -14,16 +14,10 @@ public class SchedulerController {
 
     private final DynamicSchedulerService dynamicSchedulerService;
 
-//    @GetMapping("/update-cron")
-//    public String updateCron(@RequestParam String cron) {
-//        log.info("Cron expression: " + cron);
-//        dynamicSchedulerService.scheduleTask(cron);
-//        return "Cron expression updated to " + cron;
-//    }
-
     @GetMapping("/schedule/update")
     public ResponseEntity<String> updateSchedule(@RequestParam String cron) {
         dynamicSchedulerService.scheduleTask(cron);
+        LOG.debug("Updated cron expression: {}", cron);
         return ResponseEntity.ok("Scheduled task updated with cron expression: " + cron);
     }
 

@@ -2,32 +2,36 @@ package pro.abnjava.spring.cron.service;
 
 import java.util.concurrent.ScheduledFuture;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Service;
+import pro.abnjava.spring.cron.ApplicationProperties;
 
 @Log4j2
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class DynamicSchedulerService {
+    private final ScheduledTaskService scheduledTaskService;
+    private final ApplicationProperties appProps;
 
-    private TaskScheduler taskScheduler;
     private ScheduledFuture<?> scheduledFuture;
-    private final Runnable task;
+    private TaskScheduler taskScheduler;
 
-    public DynamicSchedulerService() {
+    @PostConstruct
+    public void postContruct() {
         this.taskScheduler = new ThreadPoolTaskScheduler();
         ((ThreadPoolTaskScheduler) taskScheduler).initialize();
-
-        // Define your task here
-        this.task = () -> System.out.println("Executing scheduled task at " + System.currentTimeMillis());
+        LOG.info("Init CRON service - {}", appProps.getCron());
+        this.scheduleTask(appProps.getCron());
     }
 
     public void scheduleTask(String cronExpression) {
         stopTask(); // Stop existing task if running
+        Runnable task = () -> scheduledTaskService.executeTask();
         scheduledFuture = taskScheduler.schedule(task, new CronTrigger(cronExpression));
     }
 
@@ -36,6 +40,7 @@ public class DynamicSchedulerService {
             scheduledFuture.cancel(true);
         }
     }
+
 
 //
 }
