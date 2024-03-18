@@ -9,42 +9,35 @@ spring:
     name: cron-db
   datasource:
     name: myDS
-    url: jdbc:h2:file:./data/testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    url: jdbc:h2:file:./cron-db/data/crondb.h2;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    #url: jdbc:h2:file:./cron-db/data/testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     driverClassName: org.h2.Driver
     username: sa
     password:
+
   quartz:
+    startup-delay: 15
+    auto-startup: true
+    wait-for-jobs-to-complete-on-shutdown: true
     job-store-type: jdbc
     jdbc:
       initialize-schema: always
     properties:
-
-      #org.quartz.dataSource:
-      #  myDS:
-      #    driver: org.h2.Driver
-      #    # URL: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-      #    URL: jdbc:h2:file:./data/testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-      #    user: sa
-      #    password:
-      org.quartz.scheduler:
-        instanceName: AbnScheduler01
-        instanceId: AUTO
-        threadPool:
-          threadCount: 5
-      org.quartz.jobStore:
-        dataSource: myDS
-        #class: org.quartz.impl.jdbcjobstore.JobStoreTX
-        #class: org.quartz.impl.jdbcjobstore.JobStoreCMT
-        class: org.springframework.scheduling.quartz.LocalDataSourceJobStore
-        driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
-        #driverDelegateClass: org.quartz.impl.jdbcjobstore.oracle.OracleDelegate
-        useProperties: false
-        tablePrefix: QRTZ_
-        isClustered: false
-      
-      
-      
-      #      org.quartz.plugin:
-      #        shutdownhook:
-      #          class: org.quartz.plugins.management.ShutdownHookPlugin
-      #          cleanShutdown: TRUE
+      org:
+        quartz:
+          scheduler:
+            instanceName: QuartzScheduler
+            instanceId: AUTO
+          jobStore:
+            class: org.quartz.impl.jdbcjobstore.JobStoreCMT
+            #driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.PostgreSQLDelegate
+            tablePrefix: QRTZ_
+            isClustered: false
+          threadPool:
+            threadCount: 5
+            class: org.quartz.simpl.SimpleThreadPool
+          dataSource:
+            myDS:
+              provider: org.quartz.impl.jdbcjobstore.H2TableMetaDataJobStoreTXProvider
+          plugin: false
