@@ -1,15 +1,13 @@
-//import org.gradle.internal.impldep.junit.runner.Version.id
-
 plugins {
-    id "java"
+    id 'java'
     id "idea"
     id 'org.springframework.boot' version '3.2.3'
     id 'io.spring.dependency-management' version '1.1.4'
     id "io.freefair.lombok" version "8.6"
 }
 
-group = "pro.abnjava.spring"
-version = "1.0-SNAPSHOT"
+group = 'pro.abnjava.spring'
+version = '0.0.1-SNAPSHOT'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
@@ -24,14 +22,20 @@ configurations {
         extendsFrom annotationProcessor
     }
 }
+
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    implementation "org.springframework.boot:spring-boot-starter-webflux"
-    // Add Log4j2
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'org.springframework.boot:spring-boot-starter-log4j2'
+    implementation 'org.springframework.boot:spring-boot-starter-quartz'
+    runtimeOnly 'com.h2database:h2'
+    implementation 'com.mchange:c3p0:0.9.5.5' // Check for the latest version
+    // Use the appropriate version for your Spring version
+    implementation 'org.springframework:spring-jdbc:5.3.23'
+
 
     implementation "org.springframework.boot:spring-boot-autoconfigure"
     implementation "org.springframework.boot:spring-boot-starter-hateoas"
@@ -43,11 +47,10 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-cache"
     implementation "org.springframework.boot:spring-boot-devtools"
 
-    testImplementation "org.springframework.boot:spring-boot-test-autoconfigure"
-    testImplementation "org.springframework.boot:spring-boot-starter-test"
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
-    testImplementation platform("org.junit:junit-bom:5.9.1")
-    testImplementation "org.junit.jupiter:junit-jupiter"
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'io.projectreactor:reactor-test'
 }
 
 tasks.named('test') {

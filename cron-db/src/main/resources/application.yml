@@ -1,0 +1,50 @@
+#
+debug: true
+
+server:
+  port: 8080
+
+spring:
+  application:
+    name: cron-db
+  datasource:
+    name: myDS
+    url: jdbc:h2:file:./data/testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+  quartz:
+    job-store-type: jdbc
+    jdbc:
+      initialize-schema: always
+    properties:
+
+      #org.quartz.dataSource:
+      #  myDS:
+      #    driver: org.h2.Driver
+      #    # URL: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+      #    URL: jdbc:h2:file:./data/testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+      #    user: sa
+      #    password:
+      org.quartz.scheduler:
+        instanceName: AbnScheduler01
+        instanceId: AUTO
+        threadPool:
+          threadCount: 5
+      org.quartz.jobStore:
+        dataSource: myDS
+        #class: org.quartz.impl.jdbcjobstore.JobStoreTX
+        #class: org.quartz.impl.jdbcjobstore.JobStoreCMT
+        class: org.springframework.scheduling.quartz.LocalDataSourceJobStore
+        driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+        #driverDelegateClass: org.quartz.impl.jdbcjobstore.oracle.OracleDelegate
+        useProperties: false
+        tablePrefix: QRTZ_
+        isClustered: false
+      
+      
+      
+      #      org.quartz.plugin:
+      #        shutdownhook:
+      #          class: org.quartz.plugins.management.ShutdownHookPlugin
+      #          cleanShutdown: TRUE
