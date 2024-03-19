@@ -22,7 +22,11 @@
     </Appenders>
 
     <Loggers>
-        <Logger name="pro.abnjava.spring" level="DEBUG" additivity="false">
+        <Logger name="pro.abnjava" level="DEBUG" additivity="false">
+            <AppenderRef ref="appLog"/>
+            <AppenderRef ref="Console"/>
+        </Logger>
+        <Logger name="org.quartz" level="DEBUG" additivity="false">
             <AppenderRef ref="appLog"/>
             <AppenderRef ref="Console"/>
         </Logger>

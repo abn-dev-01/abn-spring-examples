@@ -45,3 +45,4 @@ out/
 target/
 
 /cron-db/data/**
+/cron-db/data/

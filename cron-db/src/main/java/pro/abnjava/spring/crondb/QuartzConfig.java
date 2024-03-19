@@ -1,22 +1,19 @@
 package pro.abnjava.spring.crondb;
 
-import javax.sql.DataSource;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.quartz.SchedulerFactoryBean;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.quartz.SchedulerAccessorBean;
 
 @Configuration
 @RequiredArgsConstructor
+@EnableScheduling
 public class QuartzConfig {
-    private final DataSource dataSource;
 
     @Bean
-    public SchedulerFactoryBean schedulerFactoryBean() {
-        SchedulerFactoryBean schedulerFactoryBean = new SchedulerFactoryBean();
-        schedulerFactoryBean.setDataSource(dataSource);
-        // Other configurations...
-        return schedulerFactoryBean;
+    public SchedulerAccessorBean schedulerAccessorBean() {
+        SchedulerAccessorBean schedulerAccessorBean = new SchedulerAccessorBean();
+        return schedulerAccessorBean;
     }
 }

@@ -6,7 +6,7 @@ server:
 
 spring:
   application:
-    name: cron-db
+    name: cron-db-app
   datasource:
     name: myDS
     url: jdbc:h2:file:./cron-db/data/crondb.h2;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
@@ -15,28 +15,41 @@ spring:
     password:
 
   quartz:
-    startup-delay: 15
+    startup-delay: 3
     auto-startup: true
     wait-for-jobs-to-complete-on-shutdown: true
     job-store-type: jdbc
     jdbc:
-      initialize-schema: always
+      initialize-schema: never
+      # never | always
     properties:
       org:
         quartz:
+          plugin: false
           scheduler:
             instanceName: QuartzScheduler
             instanceId: AUTO
           jobStore:
-            class: org.quartz.impl.jdbcjobstore.JobStoreCMT
-            #driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
-            driverDelegateClass: org.quartz.impl.jdbcjobstore.PostgreSQLDelegate
-            tablePrefix: QRTZ_
+            dataSource: myDS
+            useProperties: true
             isClustered: false
+            class: org.jobs.impl.jdbcjobstore.JobStoreTX
+            #class: org.jobs.impl.jdbcjobstore.JobStoreCMT
+            #class: org.springframework.scheduling.jobs.LocalDataSourceJobStore
+            driverDelegateClass: org.jobs.impl.jdbcjobstore.PostgreSQLDelegate
+            #driverDelegateClass: org.jobs.impl.jdbcjobstore.StdJDBCDelegate
+            tablePrefix: QRTZ_
           threadPool:
-            threadCount: 5
-            class: org.quartz.simpl.SimpleThreadPool
-          dataSource:
-            myDS:
-              provider: org.quartz.impl.jdbcjobstore.H2TableMetaDataJobStoreTXProvider
-          plugin: false
+            class: org.jobs.simpl.SimpleThreadPool
+            threadCount: 10
+            threadPriority: 5
+            threadsInheritContextClassLoaderOfInitializingThread: true
+            dataSource:
+              myDS:
+              #provider: org.jobs.impl.jdbcjobstore.H2TableMetaDataJobStoreTXProvider
+#            datasource:
+#              name: myDS
+#              url: jdbc:h2:file:./cron-db/data/crondb.h2;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+#              driverClassName: org.h2.Driver
+#              username: sa
+#              password:
