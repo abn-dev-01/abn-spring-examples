@@ -46,3 +46,4 @@ target/
 
 /cron-db/data/**
 /cron-db/data/
+/data/crondb.h2.*

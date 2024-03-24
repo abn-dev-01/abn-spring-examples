@@ -1,4 +1,4 @@
-package pro.abnjava.spring.crondb.jobs;
+package pro.abnjava.spring.crondb;
 
 import org.quartz.spi.TriggerFiredBundle;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;

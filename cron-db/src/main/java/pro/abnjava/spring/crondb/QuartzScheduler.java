@@ -1,4 +1,4 @@
-package pro.abnjava.spring.crondb.jobs;
+package pro.abnjava.spring.crondb;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;

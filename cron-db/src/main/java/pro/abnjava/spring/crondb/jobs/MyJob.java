@@ -10,7 +10,6 @@ import org.quartz.JobExecutionException;
 
 @Log4j2
 public class MyJob implements Job {
-
     private final AtomicLong counter = new AtomicLong();
 
     @PostConstruct
@@ -20,7 +19,7 @@ public class MyJob implements Job {
     }
 
     @Override
-    public void execute(JobExecutionContext context) throws JobExecutionException {
+    public void execute(JobExecutionContext context) {
         // Your job logic here
         final var cc = this.counter.get();
         LOG.info("cc: {}", cc);

@@ -9,7 +9,7 @@ spring:
     name: cron-db-app
   datasource:
     name: myDS
-    url: jdbc:h2:file:./cron-db/data/crondb.h2;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    url: jdbc:h2:file:./data/crondb.h2;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     driverClassName: org.h2.Driver
     username: sa
     password:
@@ -20,7 +20,7 @@ spring:
     wait-for-jobs-to-complete-on-shutdown: true
     job-store-type: jdbc
     jdbc:
-      initialize-schema: never
+      initialize-schema: always
       # never | always
     properties:
       org:
